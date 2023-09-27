@@ -9,7 +9,7 @@ from helpers import (
     exit_program,
     helper_1
 )
-# import inquirer
+import inquirer
 # questions = [
 #   inquirer.Text('name', message="What's your name"),
 #   inquirer.Text('surname', message="What's your surname"),
@@ -28,13 +28,37 @@ def main():
     Base.metadata.create_all(engine)
 
     with Session(engine) as session:
+
+        title = '''   .___________.  ______           _______   ______      __       __       _______.___________.
+   |           | /  __  \         |       \ /  __  \    |  |     |  |     /       |           |
+   `---|  |----`|  |  |  |  ______|  .--.  |  |  |  |   |  |     |  |    |   (----`---|  |----`
+       |  |     |  |  |  | |______|  |  |  |  |  |  |   |  |     |  |     \   \       |  |     
+       |  |     |  `--'  |        |  '--'  |  `--'  |   |  `----.|  | .----)   |      |  |     
+       |__|      \______/         |_______/ \______/    |_______||__| |_______/       |__|     
+                                                                                               '''
         
+        print(title)
+        
+        import inquirer
+        questions = [
+        inquirer.List('size',
+                        message="Look Ma, I can use inquire too!",
+                        choices=[ 'Does this list even do anything?', 'No it doesnt', 'Lets continue'],
+                    ),
+        ]
+        answers = inquirer.prompt(questions)
+        print()
         i1 = input("Please enter your username: ")
         one_user = session.query(User).filter(User.full_name == i1).first()
         if one_user:
+            print()
             print("User profile exists")
+            print()
+
+
             i5 = input("Do you want to create a new task? (yes/no): ")
             if i5 == "yes":
+                print()
 
 
                 i2 =input("Please enter a new task description: ")
@@ -46,38 +70,58 @@ def main():
                 session.commit()
 
         else:
+            print()
             print("Sorry, user not found")
+            print()
             i3 = input("Please input your new user name: ")
             n_user_name = User(full_name=i3)
             session.add(n_user_name)
+            print()
             i5 = input("Do you want to create a new task? (yes/no): ")
             if i5 == "yes":
+                print()
 
                 i4 = input("Please enter a new task description: ")
                 new_task = Task(task=i4, user=n_user_name)
 
                 session.add(new_task)
                 session.commit()
-
-        display = input("Do you want to display your tasks to update or delete? (yes/no): ").lower()
+            
+        print()
+        display = input("Do you want to display your tasks to update or delete?  (yes/no): ").lower()
         if display == "yes":
             usertasks = session.query(Task).filter(Task.user == one_user).all()
             print(usertasks)
+            print()
             update = input("Choose task id: ")
             updated_task = session.query(Task).filter(Task.id == int(update)).first()
+            print()
             completion_status = input("Is the task completed? (yes/no): ").lower()
             if completion_status == "yes":
                 updated_task.completed = True
-                delete = input("Delete? (yes/no): ").lower()
+                print()
+                delete = input("Would you like to delete your completed task? (yes/no): ").lower()
                 if delete == "yes":
                     session.delete(updated_task)
+                    print()
+                    print("You are now being logged out")
+                else:
+                    print()
+                    print("You are now being logged out")
+
+
                     
 
             else:
                 updated_task.completed = False
+                print()
+                print("You are now being logged out")
+            
 
-        else:
-                pass
+
+        else:   
+                print()
+                print("You are now being logged out")
         
         
         session.commit()
