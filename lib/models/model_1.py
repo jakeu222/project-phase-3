@@ -19,7 +19,9 @@ class Task(Base):
 
     id = Column(Integer, primary_key=True)
     task = Column(String)
+    # day = Column(String)
     completed = Column(Boolean, default=False)
+
 
     user_id =Column(Integer, ForeignKey("user_table.id"))
 
@@ -33,8 +35,8 @@ class Task(Base):
 if __name__ == '__main__':
     engine = create_engine("sqlite:///todo.db")
 
-    # User.__table__.drop(engine)
-    # Task.__table__.drop(engine)
+    User.__table__.drop(engine)
+    Task.__table__.drop(engine)
 
     Base.metadata.create_all(engine)
 
